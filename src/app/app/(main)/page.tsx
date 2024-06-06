@@ -9,8 +9,10 @@ import { TodoDataTable } from './_components/todo-data-table'
 import { TodoUpsertDialog } from './_components/todo-upsert-dialog'
 import { Button } from '@/components/ui/button'
 import { CirclePlus } from 'lucide-react'
+import { getUserTodos } from './actions'
 
 export default async function AppPage() {
+  const todos = await getUserTodos()
   return (
     <DashboardPage>
       <DashboardPageHeader>
@@ -29,7 +31,7 @@ export default async function AppPage() {
         </DashboardPageHeaderNav>
       </DashboardPageHeader>
       <DashboardPageMain>
-        <TodoDataTable />
+        <TodoDataTable data={todos} />
       </DashboardPageMain>
     </DashboardPage>
   )

@@ -24,7 +24,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Input } from '@/components/ui/input'
 import {
   Table,
   TableBody,
@@ -34,124 +33,19 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
+import { Todo } from '../types'
+import { useRouter } from 'next/navigation'
+import { deleteTodo, upsertTodo } from '../actions'
+import { toast } from '@/components/ui/use-toast'
+import { Check, Copy, Trash } from 'lucide-react'
 
-export type Todo = {
-  id: string
-  title: string
-  createdAt: Date
-  updatedAt: Date
-  finishedAt?: Date
+type TodoDataTable = {
+  data: Todo[]
 }
 
-const data: Todo[] = [
-  {
-    id: '1',
-    title: 'Comprar mantimentos',
-    createdAt: new Date('2024-01-01T09:00:00Z'),
-    updatedAt: new Date('2024-01-01T10:00:00Z'),
-    finishedAt: new Date('2024-01-01T12:00:00Z'),
-  },
-  {
-    id: '2',
-    title: 'Ler um livro',
-    createdAt: new Date('2024-02-15T14:30:00Z'),
-    updatedAt: new Date('2024-02-15T15:00:00Z'),
-    finishedAt: undefined, // Not finished yet
-  },
-  {
-    id: '3',
-    title: 'Limpar a casa',
-    createdAt: new Date('2024-03-05T08:00:00Z'),
-    updatedAt: new Date('2024-03-05T09:00:00Z'),
-    finishedAt: new Date('2024-03-05T11:00:00Z'),
-  },
-  {
-    id: '4',
-    title: 'Escrever um artigo',
-    createdAt: new Date('2024-04-12T13:00:00Z'),
-    updatedAt: new Date('2024-04-12T14:00:00Z'),
-    finishedAt: undefined, // Not finished yet
-  },
-  {
-    id: '5',
-    title: 'Fazer exercícios',
-    createdAt: new Date('2024-05-20T06:30:00Z'),
-    updatedAt: new Date('2024-05-20T07:00:00Z'),
-    finishedAt: new Date('2024-05-20T08:00:00Z'),
-  },
-]
+export function TodoDataTable({ data }: TodoDataTable) {
+  const router = useRouter()
 
-export const columns: ColumnDef<Todo>[] = [
-  {
-    accessorKey: 'status',
-    header: 'Status',
-    cell: ({ row }) => {
-      const { finishedAt } = row.original
-      const status: 'feito' | 'pendente' = finishedAt ? 'feito' : 'pendente'
-      const statusVariant: 'outline' | 'secondary' = finishedAt
-        ? 'outline'
-        : 'secondary'
-      return <Badge variant={statusVariant}>{status}</Badge>
-    },
-  },
-  {
-    accessorKey: 'title',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="link"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Titulo
-          <CaretSortIcon className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-    cell: ({ row }) => <div>{row.getValue('title')}</div>,
-  },
-  {
-    accessorKey: 'createdAt',
-    header: () => <div className="text-right">Criado em</div>,
-    cell: ({ row }) => {
-      return (
-        <div className="text-right font-medium">
-          {row.original.createdAt.toLocaleDateString()}
-        </div>
-      )
-    },
-  },
-  {
-    id: 'actions',
-    enableHiding: false,
-    cell: ({ row }) => {
-      const payment = row.original
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Abrir menu</span>
-              <DotsHorizontalIcon className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copiar ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Marcar como feito</DropdownMenuItem>
-            <DropdownMenuItem>Deletar</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
-    },
-  },
-]
-
-export function TodoDataTable() {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -159,6 +53,109 @@ export function TodoDataTable() {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
+
+  const handleDeleteTodo = async (todo: Todo) => {
+    await deleteTodo({ id: todo.id })
+    router.refresh()
+
+    toast({
+      title: 'Tarefa deletada',
+      description: 'A tarefa foi deletada com sucesso.',
+    })
+  }
+
+  const handleToggleDoneTodo = async (todo: Todo) => {
+    const doneAt = todo.doneAt ? null : new Date().toISOString()
+
+    await upsertTodo({ id: todo.id, doneAt })
+    router.refresh()
+
+    toast({
+      title: 'Marcado como feito',
+      description: 'Sua tarefa foi atualizada com sucesso.',
+    })
+  }
+
+  const columns: ColumnDef<Todo>[] = [
+    {
+      accessorKey: 'status',
+      header: 'Status',
+      cell: ({ row }) => {
+        const { doneAt } = row.original
+
+        const status: 'concluido' | 'pendente' = doneAt
+          ? 'concluido'
+          : 'pendente'
+        const variant: 'outline' | 'secondary' = doneAt
+          ? 'outline'
+          : 'secondary'
+
+        return <Badge variant={variant}>{status}</Badge>
+      },
+    },
+    {
+      accessorKey: 'title',
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="link"
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          >
+            Titulo
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+          </Button>
+        )
+      },
+      cell: ({ row }) => <div>{row.getValue('title')}</div>,
+    },
+    {
+      accessorKey: 'createdAt',
+      header: () => <div className="text-right">Criado em</div>,
+      cell: ({ row }) => {
+        return (
+          <div className="text-right font-medium">
+            {row.original.createdAt.toLocaleDateString()}
+          </div>
+        )
+      },
+    },
+    {
+      id: 'actions',
+      enableHiding: false,
+      cell: ({ row }) => {
+        const todo = row.original
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Abrir menu</span>
+                <DotsHorizontalIcon className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Ações</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => navigator.clipboard.writeText(todo.id)}
+              >
+                <Copy size={20} />
+                Copiar ID
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => handleToggleDoneTodo(todo)}>
+                <Check size={20} />
+                Marcar como feito
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleDeleteTodo(todo)}>
+                <Trash size={20} />
+                Deletar
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )
+      },
+    },
+  ]
 
   const table = useReactTable({
     data,
@@ -181,16 +178,6 @@ export function TodoDataTable() {
 
   return (
     <div className="w-full">
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Pesquisar tarefas..."
-          value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
-          onChange={(event) =>
-            table.getColumn('title')?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
