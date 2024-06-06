@@ -54,7 +54,11 @@ export function MainSidebar({ user }: MainSidebarProps) {
             </SidebarNavLink>
             <SidebarNavLink
               href="/app/settings"
-              active={isActive('/app/settings')}
+              active={
+                isActive('/app/settings') ||
+                isActive('/app/settings/theme') ||
+                isActive('/app/settings/billing')
+              }
             >
               <Settings2 size={20} />
               Configurações
