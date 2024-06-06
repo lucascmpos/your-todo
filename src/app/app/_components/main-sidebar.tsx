@@ -16,13 +16,19 @@ import { Settings2, SquareGanttChart } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { UserDropdown } from './user-dropdown'
 import { Logo } from '@/components/logo'
+import { Session } from 'next-auth'
 
-export function MainSidebar() {
+type MainSidebarProps = {
+  user: Session['user']
+}
+export function MainSidebar({ user }: MainSidebarProps) {
   const pathname = usePathname()
 
   const isActive = (path: string) => {
     return pathname === path
   }
+
+  if (!user) return
   return (
     <Sidebar>
       <SidebarHeader>
@@ -58,7 +64,7 @@ export function MainSidebar() {
       </SidebarMain>
 
       <SidebarFooter>
-        <UserDropdown />
+        <UserDropdown user={user} />
       </SidebarFooter>
     </Sidebar>
   )
