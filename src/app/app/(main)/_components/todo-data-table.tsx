@@ -37,7 +37,9 @@ import { Todo } from '../types'
 import { useRouter } from 'next/navigation'
 import { deleteTodo, upsertTodo } from '../actions'
 import { toast } from '@/components/ui/use-toast'
-import { Check, Copy, Trash } from 'lucide-react'
+import { Check, Plus, Copy, Trash } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { TodoUpsertDialog } from './todo-upsert-dialog'
 
 type TodoDataTable = {
   data: Todo[]
@@ -76,6 +78,15 @@ export function TodoDataTable({ data }: TodoDataTable) {
     })
   }
 
+  const handleCopyTodoID = (todo: Todo) => {
+    navigator.clipboard.writeText(todo.id)
+
+    toast({
+      title: 'ID Copiado',
+      description: 'O ID da tarefa foi copiado com sucesso.',
+    })
+  }
+
   const columns: ColumnDef<Todo>[] = [
     {
       accessorKey: 'status',
@@ -101,7 +112,7 @@ export function TodoDataTable({ data }: TodoDataTable) {
             variant="link"
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
-            Titulo
+            Tarefa
             <CaretSortIcon className="ml-2 h-4 w-4" />
           </Button>
         )
@@ -110,7 +121,7 @@ export function TodoDataTable({ data }: TodoDataTable) {
     },
     {
       accessorKey: 'createdAt',
-      header: () => <div className="text-right">Criado em</div>,
+      header: () => <div className="text-right">Criada em</div>,
       cell: ({ row }) => {
         return (
           <div className="text-right font-medium">
@@ -135,9 +146,7 @@ export function TodoDataTable({ data }: TodoDataTable) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Ações</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(todo.id)}
-              >
+              <DropdownMenuItem onClick={() => handleCopyTodoID(todo)}>
                 <Copy size={20} />
                 Copiar ID
               </DropdownMenuItem>
@@ -178,6 +187,27 @@ export function TodoDataTable({ data }: TodoDataTable) {
 
   return (
     <div className="w-full">
+      <div className="flex items-center justify-between py-4">
+        <Input
+          placeholder="Pesquise suas tarefas..."
+          value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
+          onChange={(event) =>
+            table.getColumn('title')?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+        <TodoUpsertDialog>
+          <Button
+            className="flex items-center gap-1 font-semibold"
+            variant="default"
+            size="sm"
+          >
+            <Plus size={20} />
+            Adicionar tarefa
+          </Button>
+        </TodoUpsertDialog>
+      </div>
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>

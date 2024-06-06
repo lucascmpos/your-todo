@@ -18,7 +18,6 @@ import {
   FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from '@/components/ui/form'
 import { useForm } from 'react-hook-form'
@@ -28,6 +27,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { upsertTodoSchema } from '../schema'
 import { useRouter } from 'next/navigation'
 import { toast } from '@/components/ui/use-toast'
+import { Plus } from 'lucide-react'
 
 type TodoUpsertDialogProps = {
   children?: React.ReactNode
@@ -65,7 +65,7 @@ export function TodoUpsertDialog({ children }: TodoUpsertDialogProps) {
             <DialogHeader>
               <DialogTitle>Nova tarefa</DialogTitle>
               <DialogDescription>
-                Escreva o titulo e salve para adicionar uma nova tarefa
+                Escreva no campo abaixo e salve para adicionar uma nova tarefa.
               </DialogDescription>
             </DialogHeader>
 
@@ -74,9 +74,8 @@ export function TodoUpsertDialog({ children }: TodoUpsertDialogProps) {
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Titulo</FormLabel>
                   <FormControl>
-                    <Input placeholder="Titulo da tarefa..." {...field} />
+                    <Input placeholder="ir para a academia..." {...field} />
                   </FormControl>
                   <FormDescription></FormDescription>
                   <FormMessage />
@@ -85,7 +84,10 @@ export function TodoUpsertDialog({ children }: TodoUpsertDialogProps) {
             />
 
             <DialogFooter>
-              <Button type="submit">Adicionar tarefa</Button>
+              <Button className="flex items-center gap-1" type="submit">
+                <Plus size={20} />
+                Adicionar tarefa
+              </Button>
             </DialogFooter>
           </form>
         </Form>

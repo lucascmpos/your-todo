@@ -11,12 +11,19 @@ import {
   SidebarNavMain,
 } from '@/components/dashboard/sidebar'
 
-import { Settings2, SquareGanttChart } from 'lucide-react'
+import {
+  GithubIcon,
+  Linkedin,
+  Settings2,
+  SquareGanttChart,
+  SquareUserIcon,
+} from 'lucide-react'
 
 import { usePathname } from 'next/navigation'
 import { UserDropdown } from './user-dropdown'
 import { Logo } from '@/components/logo'
 import { Session } from 'next-auth'
+import Link from 'next/link'
 
 type MainSidebarProps = {
   user: Session['user']
@@ -40,6 +47,7 @@ export function MainSidebar({ user }: MainSidebarProps) {
       <SidebarMain className="flex flex-col flex-grow">
         <SidebarNav>
           <SidebarNavMain>
+            <SidebarNavHeaderTitle>Ferramentas</SidebarNavHeaderTitle>
             <SidebarNavLink href="/app" active={isActive('/app')}>
               <SquareGanttChart size={20} />
               Tarefas
@@ -54,11 +62,49 @@ export function MainSidebar({ user }: MainSidebarProps) {
           </SidebarNavMain>
         </SidebarNav>
 
+        <SidebarNav className="mt-auto ">
+          <SidebarNavMain className="space-y-2">
+            <SidebarNavHeaderTitle>YOUR TODO DEV</SidebarNavHeaderTitle>
+            <Link
+              className="text-sm items-center hover:text-primary font-semibold flex gap-2 ml-3"
+              href="https://lucascampos-portfolio.vercel.app"
+              target="_blank"
+            >
+              <SquareUserIcon size={20} />
+              Portfolio
+            </Link>
+
+            <Link
+              className="text-sm items-center hover:text-primary font-semibold flex gap-2 ml-3"
+              href="https://github.com/lucascmpos"
+              target="_blank"
+            >
+              <GithubIcon size={20} />
+              GitHub
+            </Link>
+
+            <Link
+              className="text-sm items-center hover:text-primary font-semibold flex gap-2 ml-3"
+              href="https://github.com/lucascmpos"
+              target="_blank"
+            >
+              <Linkedin size={20} />
+              LinkedIn
+            </Link>
+          </SidebarNavMain>
+        </SidebarNav>
+
         <SidebarNav className="mt-auto">
           <SidebarNavMain>
             <SidebarNavHeaderTitle>Links extras</SidebarNavHeaderTitle>
             <SidebarNavLink href="/">Precisa de ajuda?</SidebarNavLink>
-            <SidebarNavLink href="">Site</SidebarNavLink>
+            <Link
+              className="text-xs hover:text-primary font-semibold ml-3"
+              target="_blank"
+              href="https://github.com/lucascmpos/your-todo"
+            >
+              Acesse o repositório desse app
+            </Link>
           </SidebarNavMain>
         </SidebarNav>
       </SidebarMain>
