@@ -23,7 +23,7 @@ export function UserDropdown({ user }: UserDropdownProps) {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="relative h-8 flex items-center justify-between w-full !px-0 space-x-2"
+          className="relative h-8 flex items-center justify-between w-full !px-0 space-x-1"
         >
           <Avatar className="h-8 w-8">
             <AvatarImage
