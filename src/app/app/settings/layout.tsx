@@ -16,9 +16,9 @@ export default function Layout({ children }: PropsWithChildren) {
       </DashboardPageHeader>
       <DashboardPageMain>
         <div className="container w-screen">
-          <div className="grid grid-cols-[10rem_1fr] gap-10">
+          <div className="grid grid-cols-[12rem_1fr] gap-10">
             <SettingsSidebar />
-            <div className="w-1/2 flex justify-center">{children}</div>
+            <div className="w-[50vw] flex justify-center">{children}</div>
           </div>
         </div>
       </DashboardPageMain>
