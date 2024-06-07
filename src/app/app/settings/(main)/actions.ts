@@ -5,7 +5,7 @@ import { auth } from '@/services/auth'
 import { prisma } from '@/services/database'
 
 export async function updateProfile(
-  input: z.infer<typeof updateProfileSchema>,
+  input: z.infer<typeof updateProfileSchema>
 ) {
   const session = await auth()
 

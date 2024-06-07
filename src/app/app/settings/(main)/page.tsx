@@ -3,5 +3,8 @@ import { ProfileForm } from './_components/form'
 
 export default async function SettingsPage() {
   const session = await auth()
-  return <ProfileForm defaultValues={session?.user} />
+  if (!session?.user) {
+    throw new Error('Usuário não encontrado')
+  }
+  return <ProfileForm defaultValues={session.user} />
 }
