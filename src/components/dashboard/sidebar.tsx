@@ -10,7 +10,7 @@ export function Sidebar({ className, children }: SidebarGenericProps) {
   return (
     <aside
       className={cn([
-        'border-r border-border flex flex-col space-y-6',
+        'border-r border-border flex flex-col space-y-6 ',
         className,
       ])}
     >
@@ -39,7 +39,7 @@ export function SidebarMain({ className, children }: SidebarGenericProps) {
 }
 
 export function SidebarNav({ className, children }: SidebarGenericProps) {
-  return <nav className={cn(['', className])}>{children}</nav>
+  return <nav className={cn(['px', className])}>{children}</nav>
 }
 
 export function SidebarNavHeader({ className, children }: SidebarGenericProps) {
@@ -81,7 +81,7 @@ export function SidebarNavLink({
     <Link
       href={href}
       className={cn([
-        'font-semibold text-xs px-3 py-2 rounded-md transition-all flex items-center gap-2 duration-100',
+        'font-semibold lg:w-auto w-1/3 text-xs px-3 py-2 rounded-md transition-all flex items-center gap-2 duration-100',
         active && 'bg-primary text-white',
         className,
       ])}

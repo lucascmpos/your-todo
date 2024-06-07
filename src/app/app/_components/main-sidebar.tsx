@@ -44,7 +44,7 @@ export function MainSidebar({ user }: MainSidebarProps) {
         </SidebarHeaderTitle>
       </SidebarHeader>
 
-      <SidebarMain className="flex flex-col flex-grow">
+      <SidebarMain className="flex flex-col gap-10 lg:gap-0 lg:flex-grow">
         <SidebarNav>
           <SidebarNavMain>
             <SidebarNavHeaderTitle>Ferramentas</SidebarNavHeaderTitle>

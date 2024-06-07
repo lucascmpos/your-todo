@@ -110,7 +110,7 @@ export function ProfileForm({ defaultValues }: ProfileFormProps) {
             type="submit"
           >
             {form.formState.isSubmitting && 'Salvando...'}
-            {!form.formState.isSubmitting && 'Salvar alterções'}
+            {!form.formState.isSubmitting && 'Salvar alterações'}
           </Button>
         </div>
       </form>

@@ -15,8 +15,8 @@ export default function Layout({ children }: PropsWithChildren) {
         <DashboardPageHeaderTitle>Configurações</DashboardPageHeaderTitle>
       </DashboardPageHeader>
       <DashboardPageMain>
-        <div className="container w-screen">
-          <div className="grid grid-cols-[12rem_1fr] gap-10">
+        <div className="container lg:w-screen">
+          <div className="lg:grid lg:grid-cols-[12rem_1fr] flex flex-col gap-10">
             <SettingsSidebar />
             <div className="w-[50vw] flex justify-center">{children}</div>
           </div>

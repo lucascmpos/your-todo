@@ -187,7 +187,7 @@ export function TodoDataTable({ data }: TodoDataTable) {
 
   return (
     <div className="w-full">
-      <div className="flex items-center justify-between py-4">
+      <div className="flex items-center justify-between lg:gap-0 gap-4 py-4">
         <Input
           placeholder="Pesquise suas tarefas..."
           value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
@@ -251,7 +251,7 @@ export function TodoDataTable({ data }: TodoDataTable) {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  Sem resultados.
                 </TableCell>
               </TableRow>
             )}
