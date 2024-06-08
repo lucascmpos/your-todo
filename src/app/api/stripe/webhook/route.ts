@@ -18,15 +18,11 @@ export async function POST(req: Request) {
       signature,
       process.env.STRIPE_WEBHOOK_SECRET as string,
     )
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error(`Webhook Error: ${error.message}`)
-      return new Response(`Webhook Error: ${error.message}`, { status: 400 })
-    } else {
-      console.error(`Webhook Error: Unknown error`)
-      return new Response(`Webhook Error: Unknown error`, { status: 400 })
-    }
+  } catch (error: any) {
+    console.error(`Webhook Error: ${error.message}`)
+    return new Response(`Webhook Error: ${error.message}`, { status: 400 })
   }
+
   switch (event.type) {
     case 'customer.subscription.created':
     case 'customer.subscription.updated':
