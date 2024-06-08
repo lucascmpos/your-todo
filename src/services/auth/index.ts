@@ -23,12 +23,21 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       sendVerificationRequest({
         identifier: email,
         url,
+
         provider: { server, from },
       }) {
         const { host } = new URL(url)
-        const newUrl = url.replace(host, 'localhost:3000') // Mudar para URL do DEPLOY
+        const newUrl = url.replace(host, 'yourtodos.vercel.app') // Mudar para URL do DEPLOY
 
-        const transporter = nodemailer.createTransport(server)
+        const transporter = nodemailer.createTransport({
+          host: 'smtp.resend.com',
+          port: 465,
+          secure: true,
+          auth: {
+            user: 'resend',
+            pass: 're_D9SxEB6q_MoeeiAdMjSQmgLV4usEndhkw',
+          },
+        })
 
         const message = {
           to: email,
