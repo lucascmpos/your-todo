@@ -23,6 +23,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       sendVerificationRequest({
         identifier: email,
         url,
+
         provider: { server, from },
       }) {
         const { host } = new URL(url)
@@ -30,12 +31,12 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
         const transporter = nodemailer.createTransport({
           host: 'smtp.resend.com',
-          port: 587,
-          secure: false, // true para 465, false para outras portas
+          port: 465,
+          secure: true,
           auth: {
             user: 'resend',
-            pass: 're_D9SxEB6q_MoeeiAdMjSQmgLV4usEndhkw'
-          }
+            pass: 're_D9SxEB6q_MoeeiAdMjSQmgLV4usEndhkw',
+          },
         })
 
         const message = {
