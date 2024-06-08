@@ -27,7 +27,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         provider: { server, from },
       }) {
         const { host } = new URL(url)
-        const newUrl = url.replace(host, 'yourtodos.vercel.app') // Mudar para URL do DEPLOY
+        const newUrl = url.replace(host, 'localhost:3000') // Mudar para URL do DEPLOY
 
         const transporter = nodemailer.createTransport({
           host: 'smtp.resend.com',
