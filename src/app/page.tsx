@@ -20,6 +20,11 @@ export default function Home() {
 
       <div className='flex flex-col mt-28'>
         <h1 className='text-2xl font-extralight text-center'>Desenvolvido com as melhores ferramentas do mercado</h1>
+        <div className='bg-gray-300 w-1/2 h-fit rounded-md grid grid-cols-3'>
+          <Image src="/next.svg" alt="hero" width={1080} height={1080} className='w-[500px] mt-20 border border-primary' />
+          <Image src="/vercel-logo.svg" alt="hero" width={1080} height={1080} className='w-[500px] mt-20 border border-primary' />
+          <Image src="/prisma-logo.svg" alt="hero" width={1080} height={1080} className='w-[500px] mt-20 border border-primary' />
+          </div>
       </div>
      </main>
     </body>
