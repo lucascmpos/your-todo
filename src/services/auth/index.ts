@@ -28,7 +28,15 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         const { host } = new URL(url)
         const newUrl = url.replace(host, 'https://yourtodos.vercel.app') // Mudar para URL do DEPLOY
 
-        const transporter = nodemailer.createTransport(server)
+        const transporter = nodemailer.createTransport({
+          host: 'smtp.resend.com',
+          port: 587,
+          secure: false, // true para 465, false para outras portas
+          auth: {
+            user: 'resend',
+            pass: 're_D9SxEB6q_MoeeiAdMjSQmgLV4usEndhkw'
+          }
+        })
 
         const message = {
           to: email,
